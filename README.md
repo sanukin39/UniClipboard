@@ -5,7 +5,7 @@ UniClipboard is a plugin for using OS dependent clipboard at Unity.
 It works iOS, Android OS, Unity Editor at simple interface.
 
 ## Installation
-Use unitypackage under dist folder
+Use unitypackage at [releases page](https://github.com/sanukin39/UniClipboard/releases)
 
 ## Usage
 
@@ -19,8 +19,9 @@ UniClipboard.SetText ("text you want to clip");
 UniClipboard.GetText ();
 ```
 
-## License
-MIT License
+### License
+[MIT License](https://github.com/sanukin39/UniClipboard/blob/master/LICENSE.md)
 
-Plese check LICENSE.md for more details.
+### Author
+[sanukin39](https://github.com/sanukin39)
 
