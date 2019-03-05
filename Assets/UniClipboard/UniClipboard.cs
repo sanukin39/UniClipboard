@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Runtime.InteropServices;
 
 public class UniClipboard
@@ -7,12 +7,12 @@ public class UniClipboard
     static IBoard board{
         get{
             if (_board == null) {
-                #if UNITY_EDITOR
-                _board = new EditorBoard();
-                #elif UNITY_ANDROID
+                #if UNITY_ANDROID
                 _board = new AndroidBoard();
                 #elif UNITY_IOS
                 _board = new IOSBoard ();
+                #else
+                _board = new StandardBoard(); 
                 #endif
             }
             return _board;
@@ -34,13 +34,24 @@ interface IBoard{
     string GetText();
 }
 
-class EditorBoard : IBoard {
-    public void SetText(string str){
-        GUIUtility.systemCopyBuffer = str;
+class StandardBoard : IBoard {
+    private static PropertyInfo m_systemCopyBufferProperty = null;
+    private static PropertyInfo GetSystemCopyBufferProperty() {
+        if (m_systemCopyBufferProperty == null) {
+            Type T = typeof(GUIUtility);
+            m_systemCopyBufferProperty = T.GetProperty("systemCopyBuffer", BindingFlags.Static | BindingFlags.NonPublic);
+            if (m_systemCopyBufferProperty == null)
+                throw new Exception("Can't access internal member 'GUIUtility.systemCopyBuffer' it may have been removed / renamed");
+        }
+        return m_systemCopyBufferProperty;
     }
-
+    public void SetText(string str) {
+        PropertyInfo P = GetSystemCopyBufferProperty();
+        P.SetValue(null, str, null);
+    }
     public string GetText(){
-        return GUIUtility.systemCopyBuffer;
+        PropertyInfo P = GetSystemCopyBufferProperty();
+        return (string)P.GetValue(null, null);
     }
 }
 
