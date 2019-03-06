@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Runtime.InteropServices;
+using System.Reflection;
+using System;
 
 public class UniClipboard
 {
@@ -39,9 +41,18 @@ class StandardBoard : IBoard {
     private static PropertyInfo GetSystemCopyBufferProperty() {
         if (m_systemCopyBufferProperty == null) {
             Type T = typeof(GUIUtility);
-            m_systemCopyBufferProperty = T.GetProperty("systemCopyBuffer", BindingFlags.Static | BindingFlags.NonPublic);
+            m_systemCopyBufferProperty = T.GetProperty("systemCopyBuffer", BindingFlags.Static | BindingFlags.Public);
             if (m_systemCopyBufferProperty == null)
-                throw new Exception("Can't access internal member 'GUIUtility.systemCopyBuffer' it may have been removed / renamed");
+            {
+                m_systemCopyBufferProperty =
+                    T.GetProperty("systemCopyBuffer", BindingFlags.Static | BindingFlags.NonPublic);
+            }
+
+            if (m_systemCopyBufferProperty == null)
+            {
+                throw new Exception(
+                    "Can't access internal member 'GUIUtility.systemCopyBuffer' it may have been removed / renamed");
+            }
         }
         return m_systemCopyBufferProperty;
     }
