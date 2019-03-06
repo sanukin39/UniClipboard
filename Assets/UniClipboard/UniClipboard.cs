@@ -22,7 +22,6 @@ public class UniClipboard
     }
 
     public static void SetText(string str){
-        Debug.Log ("SetText");
         board.SetText (str);
     }
 
