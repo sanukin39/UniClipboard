@@ -9,9 +9,9 @@ public class UniClipboard
     static IBoard board{
         get{
             if (_board == null) {
-                #if UNITY_ANDROID
+                #if UNITY_ANDROID && !UNITY_EDITOR
                 _board = new AndroidBoard();
-                #elif UNITY_IOS
+                #elif UNITY_IOS && !UNITY_EDITOR
                 _board = new IOSBoard ();
                 #else
                 _board = new StandardBoard(); 
