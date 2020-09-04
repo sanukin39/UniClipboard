@@ -11,7 +11,7 @@ public class UniClipboard
             if (_board == null) {
                 #if UNITY_ANDROID && !UNITY_EDITOR
                 _board = new AndroidBoard();
-                #elif UNITY_IOS && !UNITY_EDITOR
+                #elif UNITY_IOS && !UNITY_TVOS && !UNITY_EDITOR
                 _board = new IOSBoard ();
                 #else
                 _board = new StandardBoard(); 
@@ -65,7 +65,7 @@ class StandardBoard : IBoard {
     }
 }
 
-#if UNITY_IOS
+#if UNITY_IOS && !UNITY_TVOS
 class IOSBoard : IBoard {
     [DllImport("__Internal")]
     static extern void SetText_ (string str);
