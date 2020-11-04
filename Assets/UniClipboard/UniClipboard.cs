@@ -85,17 +85,26 @@ class IOSBoard : IBoard {
 #endif
 
 #if UNITY_ANDROID
-class AndroidBoard : IBoard {
-
-    AndroidJavaClass cb = new AndroidJavaClass("jp.ne.donuts.uniclipboard.Clipboard");
-
-    public void SetText(string str){
+class AndroidBoard : IBoard
+{
+    public void SetText(string str)
+    {
         Debug.Log ("Set Text At AndroidBoard: " + str);
-        cb.CallStatic ("setText", str);
+        GetClipboardManager().Call("setText", str);
     }
 
-    public string GetText(){
-        return cb.CallStatic<string> ("getText");
+    public string GetText()
+    {
+        return GetClipboardManager().Call<string>("getText");
+    }
+
+    AndroidJavaObject GetClipboardManager()
+    {
+        var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        var activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+        var staticContext = new AndroidJavaClass("android.content.Context");
+        var service = staticContext.GetStatic<AndroidJavaObject>("CLIPBOARD_SERVICE");
+        return activity.Call<AndroidJavaObject>("getSystemService", service);
     }
 }
 #endif
