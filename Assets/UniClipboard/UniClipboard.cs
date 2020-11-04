@@ -89,7 +89,6 @@ class AndroidBoard : IBoard
 {
     public void SetText(string str)
     {
-        Debug.Log ("Set Text At AndroidBoard: " + str);
         GetClipboardManager().Call("setText", str);
     }
 
